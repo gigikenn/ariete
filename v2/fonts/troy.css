@@ -1,0 +1,22 @@
+/**
+* @license
+*
+* Font Family: Troy
+* Designed by: Ilya Naumoff
+* URL: https://www.fontstore.com/fonts/troy
+* © 2026 Indian Type Foundry
+*
+* Troy Regular 
+
+*
+*/
+@font-face {
+  font-family: 'Troy-Regular';
+  src: url('../fonts/Troy-Regular.woff2') format('woff2'),
+       url('../fonts/Troy-Regular.woff') format('woff'),
+       url('../fonts/Troy-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+

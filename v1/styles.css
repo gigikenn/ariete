@@ -1,0 +1,289 @@
+:root {
+  --bg: #0a0b0d;
+  --paper: #f2efe8;
+  --paper-2: #ece7dd;
+  --ink: #0b0c10;
+  --cream: #fbf7ee;
+  --red: #d10f2f;
+  --yellow: #f5c518;
+  --muted: rgba(11, 12, 16, 0.62);
+  --hairline: rgba(11, 12, 16, 0.16);
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+  --radius: 22px;
+  --max: 1100px;
+}
+
+/* Placeholder typography — swap once you provide your TTFs. */
+@font-face {
+  font-family: "IV Display";
+  src: local("Times New Roman");
+  font-weight: 400 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: "IV Text";
+  src: local("Helvetica Neue");
+  font-weight: 300 900;
+  font-style: normal;
+}
+
+/* Rifton (local file you added) */
+@font-face {
+  font-family: "Rifton";
+  src: url("./fonts/Rifton-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Rifton Italic";
+  src: url("./fonts/Rifton-Italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: radial-gradient(
+      1200px 900px at 20% -10%,
+      rgba(245, 197, 24, 0.24),
+      transparent 55%
+    ),
+    radial-gradient(
+      900px 900px at 90% 10%,
+      rgba(209, 15, 47, 0.14),
+      transparent 55%
+    ),
+    linear-gradient(180deg, var(--paper), var(--paper-2));
+  font-family: "IV Text", system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+    Arial, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Accessibility */
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -100px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  text-decoration: none;
+  z-index: 9999;
+}
+.skip:focus {
+  top: 12px;
+}
+
+/* Grain:
+   - `.grain` textures the *background* of a section while keeping text clean.
+   - `.grain--over` overlays grain on top of media (images), for grit/movement.
+*/
+.grain,
+.grain--over {
+  position: relative;
+  isolation: isolate;
+}
+.grain::after,
+.grain--over::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("./assets/noise.svg");
+  background-size: 260px 260px;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+}
+/* Background grain sits above section background, below content (so it won't dirty fonts). */
+.grain::after {
+  z-index: 0;
+}
+.grain > * {
+  position: relative;
+  z-index: 1;
+}
+/* Media grain sits above the media itself. */
+.grain--over::after {
+  z-index: 3;
+}
+
+main {
+  padding-top: 0;
+}
+
+/* HERO: tall track + sticky viewport. The image "reveals" via JS translateY. */
+.hero {
+  background: transparent;
+}
+.hero__track {
+  height: 700vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.hero__viewport {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: none;
+  border: 0;
+  background: #0a0b0d;
+}
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero__img {
+  width: 100%;
+  height: 180%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  transform: translate3d(0, var(--heroShift, 0px), 0);
+  will-change: transform;
+  filter: contrast(1.12) saturate(1.06);
+}
+
+/* subtle vignette and grit — does not affect text */
+.hero__media::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: radial-gradient(
+      1200px 900px at 40% 20%,
+      rgba(0, 0, 0, 0.18),
+      transparent 55%
+    ),
+    radial-gradient(
+      900px 600px at 70% 90%,
+      rgba(0, 0, 0, 0.32),
+      transparent 60%
+    );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero__wordmark {
+  position: absolute;
+  left: 22px;
+  top: 18px;
+  z-index: 3;
+  color: rgba(242, 239, 232, 0.92);
+  font-family: "Rifton", "IV Display", ui-serif, Georgia, Times, serif;
+  font-size: clamp(32px, 5vw, 64px);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-transform: none;
+  text-shadow: 0 16px 70px rgba(0, 0, 0, 0.55);
+  opacity: var(--heroMarkOpacity, 1);
+  transform: translate3d(0, var(--heroMarkY, 0px), 0);
+  will-change: opacity, transform;
+}
+
+/* Quote now lives on the hero image */
+.hero__quote {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 80px 18px;
+  pointer-events: none;
+}
+.hero__quoteText {
+  margin: 0;
+  text-align: center;
+  color: rgba(242, 239, 232, 0.94);
+  font-family: "IV Display", ui-serif, Georgia, Times, serif;
+  font-size: clamp(40px, 6vw, 92px);
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  text-shadow: 0 18px 80px rgba(0, 0, 0, 0.62);
+  opacity: var(--heroQuoteOpacity, 0);
+  transform: translate3d(0, var(--heroQuoteY, 18px), 0);
+  will-change: opacity, transform;
+}
+
+/* Closing overlay on hero (appears near the end) */
+.hero__closing {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%) translateY(var(--heroClosingY, 18px));
+  z-index: 3;
+  width: min(var(--max), calc(100vw - 36px));
+  text-align: center;
+  opacity: var(--heroClosingOpacity, 0);
+  pointer-events: auto;
+  will-change: opacity, transform;
+}
+.hero__tagline {
+  margin: 0 0 14px;
+  font-family: "IV Display", ui-serif, Georgia, Times, serif;
+  font-size: clamp(20px, 3.2vw, 42px);
+  letter-spacing: -0.03em;
+  color: rgba(242, 239, 232, 0.94);
+  text-shadow: 0 18px 80px rgba(0, 0, 0, 0.62);
+}
+.hero__email {
+  display: inline-block;
+  text-decoration: none;
+  font-family: "IV Display", ui-serif, Georgia, Times, serif;
+  font-size: clamp(18px, 2.8vw, 34px);
+  letter-spacing: -0.03em;
+  color: rgba(209, 15, 47, 0.95);
+  text-shadow: 0 18px 80px rgba(0, 0, 0, 0.5);
+}
+.hero__email:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+.hero__copyright {
+  margin: 14px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(242, 239, 232, 0.8);
+  text-shadow: 0 18px 80px rgba(0, 0, 0, 0.55);
+}
+
+/* Responsive tweaks */
+@media (max-width: 720px) {
+  .hero__track {
+    height: 620vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__img {
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
