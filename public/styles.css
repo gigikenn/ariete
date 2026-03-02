@@ -211,7 +211,7 @@ main {
   top: 18px;
   z-index: 3;
   color: rgba(242, 239, 232, 0.92);
-  font-family: "Rifton", "IV Display", ui-serif, Georgia, Times, serif;
+  font-family: "Baro LineOne", "Rifton", "IV Display", ui-serif, Georgia, Times, serif;
   font-size: clamp(32px, 5vw, 64px);
   letter-spacing: -0.04em;
   line-height: 1;
