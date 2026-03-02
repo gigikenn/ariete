@@ -73,17 +73,26 @@ body {
 }
 
 html {
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  color: var(--cream);
-  background: var(--red);
+  color: var(--ink);
+  background: radial-gradient(
+      1200px 900px at 20% -10%,
+      rgba(245, 197, 24, 0.24),
+      transparent 55%
+    ),
+    radial-gradient(
+      900px 900px at 90% 10%,
+      rgba(209, 15, 47, 0.14),
+      transparent 55%
+    ),
+    linear-gradient(180deg, var(--paper), var(--paper-2));
   font-family: "IV Text", system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
     Arial, sans-serif;
   letter-spacing: -0.01em;
-  overflow: hidden;
 }
 
 /* Accessibility */
@@ -94,7 +103,7 @@ body {
   padding: 10px 12px;
   border-radius: 999px;
   background: var(--cream);
-  color: var(--red);
+  color: var(--ink);
   border: 1px solid var(--hairline);
   text-decoration: none;
   z-index: 9999;
@@ -145,7 +154,7 @@ main {
   background: transparent;
 }
 .hero__track {
-  height: 100vh;
+  height: 700vh;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -158,23 +167,83 @@ main {
   overflow: hidden;
   box-shadow: none;
   border: 0;
-  background: var(--red);
+  background: #0a0b0d;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero__img {
+  width: 100%;
+  height: 180%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  transform: translate3d(0, var(--heroShift, 0px), 0);
+  will-change: transform;
+  filter: contrast(1.12) saturate(1.06);
+}
+
+/* subtle vignette and grit — does not affect text */
+.hero__media::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: radial-gradient(
+      1200px 900px at 40% 20%,
+      rgba(0, 0, 0, 0.18),
+      transparent 55%
+    ),
+    radial-gradient(
+      900px 600px at 70% 90%,
+      rgba(0, 0, 0, 0.32),
+      transparent 60%
+    );
+  z-index: 1;
+  pointer-events: none;
 }
 .hero__wordmark {
   position: absolute;
   left: 22px;
   top: 18px;
   z-index: 3;
-  color: var(--cream);
-  font-family: "Baro LineOne", "Troy", "Rifton", "IV Display", ui-serif, Georgia,
-    Times, serif;
+  color: rgba(242, 239, 232, 0.92);
+  font-family: "Rifton", "IV Display", ui-serif, Georgia, Times, serif;
   font-size: clamp(32px, 5vw, 64px);
   letter-spacing: -0.04em;
   line-height: 1;
   text-transform: none;
-  text-shadow: none;
+  text-shadow: 0 16px 70px rgba(0, 0, 0, 0.55);
   opacity: var(--heroMarkOpacity, 1);
   transform: translate3d(0, var(--heroMarkY, 0px), 0);
+  will-change: opacity, transform;
+}
+
+/* Quote lives over the hero image */
+.hero__quote {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 80px 18px;
+  pointer-events: none;
+}
+.hero__quoteText {
+  margin: 0;
+  text-align: center;
+  color: rgba(242, 239, 232, 0.94);
+  font-family: "IV Display", ui-serif, Georgia, Times, serif;
+  font-size: clamp(40px, 6vw, 92px);
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  text-shadow: 0 18px 80px rgba(0, 0, 0, 0.62);
+  opacity: var(--heroQuoteOpacity, 0);
+  transform: translate3d(0, var(--heroQuoteY, 18px), 0);
   will-change: opacity, transform;
 }
 
@@ -187,7 +256,7 @@ main {
   z-index: 3;
   width: min(var(--max), calc(100vw - 36px));
   text-align: center;
-  opacity: 1;
+  opacity: var(--heroClosingOpacity, 0);
   pointer-events: auto;
   will-change: opacity, transform;
 }
@@ -197,8 +266,8 @@ main {
   font-family: "IV Display", ui-serif, Georgia, Times, serif;
   font-size: clamp(18px, 2.8vw, 34px);
   letter-spacing: -0.03em;
-  color: var(--cream);
-  text-shadow: none;
+  color: rgba(209, 15, 47, 0.95);
+  text-shadow: 0 18px 80px rgba(0, 0, 0, 0.5);
 }
 .hero__email:hover {
   text-decoration: underline;
@@ -217,7 +286,7 @@ main {
 /* Responsive tweaks */
 @media (max-width: 720px) {
   .hero__track {
-    height: 100vh;
+    height: 620vh;
   }
 }
 
