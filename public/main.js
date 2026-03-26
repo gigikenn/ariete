@@ -6,44 +6,12 @@ function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 }
 
-const HERO_TAGLINE =
-  "advising capital and luxury brands on entering elite sport";
-
-function setupTaglineTypewriter() {
-  const el = document.getElementById("heroTagline");
-  if (!el) return;
-
-  if (prefersReducedMotion()) {
-    el.textContent = HERO_TAGLINE;
-    return;
-  }
-
-  el.textContent = "";
-  el.classList.add("hero__tagline--typing");
-
-  let i = 0;
-  const msPerChar = 26;
-
-  function tick() {
-    if (i < HERO_TAGLINE.length) {
-      el.textContent += HERO_TAGLINE[i];
-      i += 1;
-      window.setTimeout(tick, msPerChar);
-    } else {
-      el.classList.remove("hero__tagline--typing");
-    }
-  }
-
-  window.requestAnimationFrame(() => {
-    window.setTimeout(tick, 180);
-  });
-}
-
 function setupHeroScrollReveal() {
   const track = document.getElementById("heroTrack");
   const img = document.getElementById("heroImage");
   const mark = document.getElementById("heroWordmark");
   const quoteBlock = document.getElementById("heroQuoteInner");
+  const tagline = document.getElementById("heroTagline");
   const quoteText = document.querySelector("#heroQuote .hero__quoteText");
   const closing = document.getElementById("heroClosing");
   if (!track || !img) return;
@@ -53,6 +21,10 @@ function setupHeroScrollReveal() {
     if (quoteBlockRm) {
       quoteBlockRm.style.setProperty("--heroQuoteOpacity", "1");
       quoteBlockRm.style.setProperty("--heroQuoteY", "0px");
+    }
+    if (tagline) {
+      tagline.style.setProperty("--heroTaglineOpacity", "1");
+      tagline.style.setProperty("--heroTaglineY", "0px");
     }
     if (quoteText) {
       quoteText.style.setProperty("--heroChiOpacity", "1");
@@ -88,6 +60,25 @@ function setupHeroScrollReveal() {
     if (quoteBlock) {
       quoteBlock.style.setProperty("--heroQuoteOpacity", "1");
       quoteBlock.style.setProperty("--heroQuoteY", "0px");
+    }
+
+    if (tagline) {
+      const chiInStart = 0.76;
+      const fadeInStart = 0.015;
+      const fadeInEnd = 0.07;
+      const fadeOutStart = 0.62;
+      const fadeOutEnd = chiInStart;
+
+      const tIn = clamp((p - fadeInStart) / (fadeInEnd - fadeInStart), 0, 1);
+      const easedIn = 1 - Math.pow(1 - tIn, 2.4);
+
+      const tOut = clamp((p - fadeOutStart) / (fadeOutEnd - fadeOutStart), 0, 1);
+      const easedOut = Math.pow(tOut, 2);
+
+      const opacity = clamp(easedIn * (1 - easedOut), 0, 1);
+      const y = 12 * (1 - easedIn) + 6 * easedOut;
+      tagline.style.setProperty("--heroTaglineOpacity", String(opacity));
+      tagline.style.setProperty("--heroTaglineY", `${y}px`);
     }
 
     if (quoteText) {
@@ -130,6 +121,5 @@ function setupHeroScrollReveal() {
   requestTick();
 }
 
-setupTaglineTypewriter();
 setupHeroScrollReveal();
 
