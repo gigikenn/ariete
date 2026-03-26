@@ -6,15 +6,53 @@ function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 }
 
+const HERO_TAGLINE =
+  "advising capital and luxury brands on entering elite sport";
+
+function setupTaglineTypewriter() {
+  const el = document.getElementById("heroTagline");
+  if (!el) return;
+
+  if (prefersReducedMotion()) {
+    el.textContent = HERO_TAGLINE;
+    return;
+  }
+
+  el.textContent = "";
+  el.classList.add("hero__tagline--typing");
+
+  let i = 0;
+  const msPerChar = 26;
+
+  function tick() {
+    if (i < HERO_TAGLINE.length) {
+      el.textContent += HERO_TAGLINE[i];
+      i += 1;
+      window.setTimeout(tick, msPerChar);
+    } else {
+      el.classList.remove("hero__tagline--typing");
+    }
+  }
+
+  window.requestAnimationFrame(() => {
+    window.setTimeout(tick, 180);
+  });
+}
+
 function setupHeroScrollReveal() {
   const track = document.getElementById("heroTrack");
   const img = document.getElementById("heroImage");
   const mark = document.getElementById("heroWordmark");
-  const quoteText = document.querySelector("#heroQuote .hero__quoteText");
+  const quoteBlock = document.getElementById("heroQuoteInner");
   const closing = document.getElementById("heroClosing");
   if (!track || !img) return;
   if (prefersReducedMotion()) {
     if (mark) mark.style.setProperty("--heroMarkOpacity", "1");
+    const quoteBlockRm = document.getElementById("heroQuoteInner");
+    if (quoteBlockRm) {
+      quoteBlockRm.style.setProperty("--heroQuoteOpacity", "1");
+      quoteBlockRm.style.setProperty("--heroQuoteY", "0px");
+    }
     return;
   }
 
@@ -42,7 +80,7 @@ function setupHeroScrollReveal() {
 
     if (mark) mark.style.setProperty("--heroMarkOpacity", "1");
 
-    if (quoteText) {
+    if (quoteBlock) {
       const inStart = 0.16;
       const inEnd = 0.26;
       const outStart = 0.52;
@@ -54,10 +92,14 @@ function setupHeroScrollReveal() {
       const tOut = clamp((p - outStart) / (outEnd - outStart), 0, 1);
       const easedOut = Math.pow(tOut, 1.8);
 
-      const opacity = clamp(easedIn * (1 - easedOut), 0, 1);
-      const y = 18 * (1 - easedIn) + -10 * easedOut;
-      quoteText.style.setProperty("--heroQuoteOpacity", String(opacity));
-      quoteText.style.setProperty("--heroQuoteY", `${y}px`);
+      const scrollOpacity = clamp(easedIn * (1 - easedOut), 0, 1);
+      const scrollY = 18 * (1 - easedIn) + -10 * easedOut;
+      /* Keep copy visible at load so the tagline typewriter can be read */
+      const introBlend = clamp(1 - p / 0.18, 0, 1);
+      const opacity = Math.max(scrollOpacity, introBlend);
+      const y = introBlend > 0 ? 0 : scrollY;
+      quoteBlock.style.setProperty("--heroQuoteOpacity", String(opacity));
+      quoteBlock.style.setProperty("--heroQuoteY", `${y}px`);
     }
 
     if (closing) {
@@ -82,5 +124,6 @@ function setupHeroScrollReveal() {
   requestTick();
 }
 
+setupTaglineTypewriter();
 setupHeroScrollReveal();
 

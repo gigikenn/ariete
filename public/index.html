@@ -8,7 +8,7 @@
       name="description"
       content="Ariete — private capital for a new era."
     />
-    <link rel="stylesheet" href="./styles.css?v=2" />
+    <link rel="stylesheet" href="./styles.css?v=3" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -34,7 +34,15 @@
             </div>
 
             <div id="heroQuote" class="hero__quote" aria-label="Quote">
-              <p class="hero__quoteText">chi dorme non piglia pesce</p>
+              <div id="heroQuoteInner" class="hero__quoteInner">
+                <p
+                  id="heroTagline"
+                  class="hero__tagline"
+                  aria-live="polite"
+                  aria-atomic="true"
+                ></p>
+                <p class="hero__quoteText">chi dorme non piglia pesce</p>
+              </div>
             </div>
 
             <div id="heroClosing" class="hero__closing" aria-label="Closing">
