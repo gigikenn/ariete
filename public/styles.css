@@ -245,15 +245,14 @@ main {
 .hero__tagline {
   margin: 0;
   text-align: center;
-  color: rgba(242, 239, 232, 0.88);
-  font-family: "Troy", "IV Text", system-ui, sans-serif;
-  font-size: clamp(14px, 2.1vw, 20px);
-  line-height: 1.35;
-  letter-spacing: 0.02em;
-  font-weight: 400;
-  text-transform: none;
-  text-shadow: 0 12px 50px rgba(0, 0, 0, 0.55);
-  min-height: 1.35em;
+  color: rgba(242, 239, 232, 0.94);
+  font-family: "IV Display", ui-serif, Georgia, Times, serif;
+  font-size: clamp(40px, 6vw, 92px);
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  text-shadow: 0 18px 80px rgba(0, 0, 0, 0.62);
+  min-height: 0.96em;
 }
 .hero__tagline.hero__tagline--typing::after {
   content: "";
@@ -282,6 +281,9 @@ main {
   letter-spacing: -0.03em;
   text-transform: lowercase;
   text-shadow: 0 18px 80px rgba(0, 0, 0, 0.62);
+  opacity: var(--heroChiOpacity, 0);
+  transform: translate3d(0, var(--heroChiY, 18px), 0);
+  will-change: opacity, transform;
 }
 
 /* Closing overlay on hero (appears near the end) */

@@ -44,6 +44,7 @@ function setupHeroScrollReveal() {
   const img = document.getElementById("heroImage");
   const mark = document.getElementById("heroWordmark");
   const quoteBlock = document.getElementById("heroQuoteInner");
+  const quoteText = document.querySelector("#heroQuote .hero__quoteText");
   const closing = document.getElementById("heroClosing");
   if (!track || !img) return;
   if (prefersReducedMotion()) {
@@ -52,6 +53,10 @@ function setupHeroScrollReveal() {
     if (quoteBlockRm) {
       quoteBlockRm.style.setProperty("--heroQuoteOpacity", "1");
       quoteBlockRm.style.setProperty("--heroQuoteY", "0px");
+    }
+    if (quoteText) {
+      quoteText.style.setProperty("--heroChiOpacity", "1");
+      quoteText.style.setProperty("--heroChiY", "0px");
     }
     return;
   }
@@ -81,10 +86,15 @@ function setupHeroScrollReveal() {
     if (mark) mark.style.setProperty("--heroMarkOpacity", "1");
 
     if (quoteBlock) {
-      const inStart = 0.16;
-      const inEnd = 0.26;
-      const outStart = 0.52;
-      const outEnd = 0.72;
+      quoteBlock.style.setProperty("--heroQuoteOpacity", "1");
+      quoteBlock.style.setProperty("--heroQuoteY", "0px");
+    }
+
+    if (quoteText) {
+      const inStart = 0.76;
+      const inEnd = 0.88;
+      const outStart = 0.95;
+      const outEnd = 0.99;
 
       const tIn = clamp((p - inStart) / (inEnd - inStart), 0, 1);
       const easedIn = 1 - Math.pow(1 - tIn, 2.4);
@@ -92,14 +102,10 @@ function setupHeroScrollReveal() {
       const tOut = clamp((p - outStart) / (outEnd - outStart), 0, 1);
       const easedOut = Math.pow(tOut, 1.8);
 
-      const scrollOpacity = clamp(easedIn * (1 - easedOut), 0, 1);
-      const scrollY = 18 * (1 - easedIn) + -10 * easedOut;
-      /* Keep copy visible at load so the tagline typewriter can be read */
-      const introBlend = clamp(1 - p / 0.18, 0, 1);
-      const opacity = Math.max(scrollOpacity, introBlend);
-      const y = introBlend > 0 ? 0 : scrollY;
-      quoteBlock.style.setProperty("--heroQuoteOpacity", String(opacity));
-      quoteBlock.style.setProperty("--heroQuoteY", `${y}px`);
+      const opacity = clamp(easedIn * (1 - easedOut), 0, 1);
+      const y = 18 * (1 - easedIn) + -8 * easedOut;
+      quoteText.style.setProperty("--heroChiOpacity", String(opacity));
+      quoteText.style.setProperty("--heroChiY", `${y}px`);
     }
 
     if (closing) {
