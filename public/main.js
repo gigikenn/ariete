@@ -88,13 +88,12 @@ function setupHeroScrollReveal() {
       const n = lines.length;
       if (n > 0) {
         const t = clamp((p - fadeInStart) / (chiInStart - fadeInStart), 0, 1);
-        const pos = t * (n - 1);
+        const idx = Math.min(Math.floor(t * n), n - 1);
         lines.forEach((li, i) => {
-          const lineOpacity = clamp(1 - Math.abs(pos - i), 0, 1);
-          const driftEm = (i - pos) * 0.1;
+          const lineOpacity = i === idx ? 1 : 0;
           const combined = lineOpacity * envelope;
           li.style.setProperty("--heroTaglineLineOpacity", String(combined));
-          li.style.setProperty("--heroTaglineLineY", `${driftEm}em`);
+          li.style.setProperty("--heroTaglineLineY", "0em");
         });
       }
     }
