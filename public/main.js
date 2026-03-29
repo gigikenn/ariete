@@ -25,6 +25,10 @@ function setupHeroScrollReveal() {
     if (tagline) {
       tagline.style.setProperty("--heroTaglineOpacity", "1");
       tagline.style.setProperty("--heroTaglineY", "0px");
+      tagline.querySelectorAll(".hero__taglineList li").forEach((li) => {
+        li.style.removeProperty("--heroTaglineLineOpacity");
+        li.style.removeProperty("--heroTaglineLineY");
+      });
     }
     if (quoteText) {
       quoteText.style.setProperty("--heroChiOpacity", "1");
@@ -75,10 +79,24 @@ function setupHeroScrollReveal() {
       const tOut = clamp((p - fadeOutStart) / (fadeOutEnd - fadeOutStart), 0, 1);
       const easedOut = Math.pow(tOut, 2);
 
-      const opacity = clamp(easedIn * (1 - easedOut), 0, 1);
+      const envelope = clamp(easedIn * (1 - easedOut), 0, 1);
       const y = 12 * (1 - easedIn) + 6 * easedOut;
-      tagline.style.setProperty("--heroTaglineOpacity", String(opacity));
+      tagline.style.setProperty("--heroTaglineOpacity", String(envelope));
       tagline.style.setProperty("--heroTaglineY", `${y}px`);
+
+      const lines = tagline.querySelectorAll(".hero__taglineList li");
+      const n = lines.length;
+      if (n > 0) {
+        const t = clamp((p - fadeInStart) / (chiInStart - fadeInStart), 0, 1);
+        const pos = t * (n - 1);
+        lines.forEach((li, i) => {
+          const lineOpacity = clamp(1 - Math.abs(pos - i), 0, 1);
+          const driftEm = (i - pos) * 0.1;
+          const combined = lineOpacity * envelope;
+          li.style.setProperty("--heroTaglineLineOpacity", String(combined));
+          li.style.setProperty("--heroTaglineLineY", `${driftEm}em`);
+        });
+      }
     }
 
     if (quoteText) {
